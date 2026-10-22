@@ -45,8 +45,17 @@ export function Hero() {
             on your own node.
           </h1>
         </Reveal>
-        <Reveal delay={100} className="mt-8">
+        <Reveal delay={100} className="mt-8 flex flex-wrap items-center justify-center gap-x-6 gap-y-3">
           <WatchDemo />
+          <Link
+            href="/docs"
+            className="h-arrow-trigger inline-flex items-center gap-1.5 text-[14px] text-white/60 transition-colors hover:text-white"
+          >
+            Read the docs
+            <svg viewBox="0 0 16 16" className="h-arrow size-3.5" aria-hidden>
+              <path d="M3 8h10M9 4l4 4-4 4" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" />
+            </svg>
+          </Link>
         </Reveal>
         <Reveal delay={200} className="mt-12">
           <Commands />
