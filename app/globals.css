@@ -3,26 +3,10 @@
 @theme inline {
   --font-sans: var(--font-geist-sans);
   --font-mono: var(--font-geist-mono);
-  --font-serif: var(--font-instrument-serif);
 
-  /* Two-tone rhythm: near-black bands and warm off-white bands */
+  /* Two tones: near-black and warm off-white */
   --color-ink: #0a0a0a;
-  --color-ink-2: #111111;
-  --color-ink-3: #1a1a1a;
   --color-paper: #f5f4f0;
-  --color-paper-2: #ecebe5;
-  --color-paper-3: #e3e1d9;
-
-  /* Muted body copy */
-  --color-mute-dark: #8a8a8a;
-  --color-mute-light: #555555;
-
-  /* The single accent, reserved for the closing CTA */
-  --color-accent: #2563eb;
-  --color-accent-hover: #1d4ed8;
-
-  /* Selection-box motif */
-  --color-select: #7c93f5;
 }
 
 html {
@@ -37,7 +21,7 @@ body {
 }
 
 ::selection {
-  background: rgba(124, 147, 245, 0.35);
+  background: rgba(255, 255, 255, 0.2);
 }
 
 /* Display type: tight leading, slight negative tracking */
@@ -62,59 +46,6 @@ body {
   transform: none;
 }
 
-/* Calm float for hero fragments */
-@keyframes float {
-  0%,
-  100% {
-    transform: translateY(0) rotate(var(--tilt, 0deg));
-  }
-  50% {
-    transform: translateY(-8px) rotate(var(--tilt, 0deg));
-  }
-}
-.float {
-  animation: float var(--float-dur, 7s) ease-in-out infinite;
-  animation-delay: var(--float-delay, 0s);
-}
-
-/* Waveform bars in the demo footage */
-@keyframes wave {
-  0%,
-  100% {
-    transform: scaleY(0.35);
-  }
-  50% {
-    transform: scaleY(1);
-  }
-}
-.wave-bar {
-  transform-origin: center;
-  animation: wave 1.6s ease-in-out infinite;
-}
-
-/* Slow drift for the out-of-focus "studio lights" */
-@keyframes drift {
-  0%,
-  100% {
-    transform: translate(0, 0);
-  }
-  50% {
-    transform: translate(24px, -12px);
-  }
-}
-.drift {
-  animation: drift 14s ease-in-out infinite;
-}
-
-@keyframes spin-slow {
-  to {
-    transform: rotate(360deg);
-  }
-}
-.spin-slow {
-  animation: spin-slow 24s linear infinite;
-}
-
 @media (prefers-reduced-motion: reduce) {
   html {
     scroll-behavior: auto;
@@ -123,11 +54,5 @@ body {
     opacity: 1;
     transform: none;
     transition: none;
-  }
-  .float,
-  .wave-bar,
-  .drift,
-  .spin-slow {
-    animation: none;
   }
 }

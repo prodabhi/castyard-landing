@@ -1,78 +1,67 @@
 "use client";
 
 import { useState } from "react";
-import { ownNode, quickstart } from "./steps";
+import { nodeCmds, quickstartCmd } from "./steps";
 
-const tabs = [
-  { id: "node", label: "Your own node", count: "3 commands" },
-  { id: "quick", label: "Quickstart", count: "1 command" },
-] as const;
-
-/** Terminal card with the real install paths, each command copyable. */
 export function Commands() {
-  const [tab, setTab] = useState<(typeof tabs)[number]["id"]>("node");
-  const active = tab === "node" ? ownNode : quickstart;
+  const [open, setOpen] = useState(false);
 
   return (
-    <div className="mx-auto max-w-[760px] overflow-hidden rounded-2xl border border-white/10 bg-white/[0.03] text-left shadow-[0_30px_80px_-30px_rgba(0,0,0,0.8)] backdrop-blur-sm">
-      <div role="tablist" className="flex gap-1 border-b border-white/[0.07] p-1.5">
-        {tabs.map((t) => (
-          <button
-            key={t.id}
-            role="tab"
-            type="button"
-            aria-selected={tab === t.id}
-            onClick={() => setTab(t.id)}
-            className={`flex items-center gap-2 rounded-lg px-3 py-1.5 text-[13.5px] transition-colors ${
-              tab === t.id ? "bg-white/10 text-white" : "text-white/45 hover:text-white/80"
-            }`}
-          >
-            {t.label}
-            <span className="hidden font-mono text-[11px] text-white/35 sm:inline">{t.count}</span>
-          </button>
-        ))}
+    <div>
+      <p className="font-mono text-[12px] text-white/40">Empty folder · Node 20+ · test Farcaster account</p>
+
+      <div className="mt-4 inline-flex items-center gap-3 rounded-full bg-white py-2 pl-5 pr-2 shadow-[0_0_60px_-10px_rgba(255,255,255,0.25)] sm:gap-5 sm:pl-7">
+        <code className="font-mono text-[13px] text-ink sm:text-[18px]">
+          <span className="select-none text-ink/35">$ </span>
+          {quickstartCmd}
+        </code>
+        <CopyButton
+          text={quickstartCmd}
+          className="size-9 text-ink/50 hover:bg-ink/[0.06] hover:text-ink sm:size-10"
+        />
       </div>
 
-      <ol className="space-y-3 p-4 sm:p-5">
-        {active.commands.map((c, i) => (
-          <li key={c.cmd}>
-            <p className="mb-1.5 flex items-center gap-2 text-[13px] text-white/50">
-              <span className="grid size-[18px] place-items-center rounded-full bg-white font-mono text-[10.5px] font-medium text-ink">
-                {i + 1}
-              </span>
-              {c.label}
-            </p>
-            <div className="flex items-center gap-3 rounded-xl bg-black/40 py-2 pl-3.5 pr-2 ring-1 ring-white/[0.06]">
-              <code className="min-w-0 flex-1 overflow-x-auto whitespace-nowrap font-mono text-[12px] text-white sm:text-[13px] [scrollbar-width:none]">
-                <span className="select-none text-white/35">$ </span>
-                {c.cmd}
-              </code>
-              <CopyButton text={c.cmd} />
-            </div>
-          </li>
-        ))}
-      </ol>
+      <p className="mt-4 font-mono text-[12px] text-white/40">then open localhost:3000</p>
 
-      {tab === "quick" && (
-        <ul className="mx-4 mb-4 space-y-1 rounded-xl border border-white/[0.07] px-3.5 py-3 font-mono text-[12.5px] sm:mx-5">
-          {quickstart.prompts.map((p) => (
-            <li key={p.text} className="flex gap-2">
-              <span className="w-3 text-white/50">{p.mark}</span>
-              <span className="text-white/80">{p.text}</span>
-              {p.hint && <span className="truncate text-white/35">› {p.hint}</span>}
-            </li>
-          ))}
-        </ul>
+      <button
+        type="button"
+        aria-expanded={open}
+        onClick={() => setOpen((o) => !o)}
+        className="mt-14 inline-flex items-center gap-1.5 text-[14px] text-white/55 transition-colors hover:text-white"
+      >
+        Run your own node
+        <svg viewBox="0 0 16 16" className={`size-3.5 transition-transform ${open ? "rotate-180" : ""}`} aria-hidden>
+          <path d="m4 6 4 4 4-4" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" />
+        </svg>
+      </button>
+
+      {open && (
+        <div className="mx-auto mt-5 max-w-[620px] text-left">
+          <ol className="divide-y divide-white/[0.07] rounded-2xl border border-white/10">
+            {nodeCmds.map((cmd) => (
+              <li key={cmd} className="flex items-center gap-3 py-1.5 pl-4 pr-1.5">
+                <code className="min-w-0 flex-1 overflow-x-auto whitespace-nowrap font-mono text-[12px] text-white/85 [scrollbar-width:none] sm:text-[13px]">
+                  <span className="select-none text-white/35">$ </span>
+                  {cmd}
+                </code>
+                <CopyButton text={cmd} />
+              </li>
+            ))}
+          </ol>
+          <p className="mt-3 text-center font-mono text-[12px] text-white/35">Google Cloud, paid plan · about a day to sync</p>
+        </div>
       )}
-
-      <p className="border-t border-white/[0.07] px-4 py-3 font-mono text-[11.5px] text-white/40 sm:px-5">
-        {active.requires}
-      </p>
     </div>
   );
 }
 
-export function CopyButton({ text, className = "" }: { text: string; className?: string }) {
+function CopyButton({
+  text,
+  className = "size-8 text-white/55 hover:bg-white/10 hover:text-white",
+}: {
+  text: string;
+  className?: string;
+}) {
   const [copied, setCopied] = useState(false);
   return (
     <button
@@ -87,7 +76,7 @@ export function CopyButton({ text, className = "" }: { text: string; className?:
           // Clipboard can be blocked (insecure origin, permissions); nothing to do.
         }
       }}
-      className={`grid size-7 shrink-0 place-items-center rounded-lg text-white/50 transition-colors hover:bg-white/10 hover:text-white ${className}`}
+      className={`grid shrink-0 place-items-center rounded-full transition-colors ${className}`}
     >
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" className="size-4" aria-hidden>
         {copied ? (
