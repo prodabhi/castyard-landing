@@ -1,5 +1,5 @@
 import { Demos } from "@/components/demos";
-import { Footer } from "@/components/footer";
+import { Faq } from "@/components/faq";
 import { Hero, Nav } from "@/components/hero";
 
 export default function Home() {
@@ -8,7 +8,7 @@ export default function Home() {
       <Nav />
       <Hero />
       <Demos />
-      <Footer />
+      <Faq />
     </main>
   );
 }

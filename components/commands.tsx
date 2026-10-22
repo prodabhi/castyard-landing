@@ -10,7 +10,7 @@ export function Commands() {
     <div>
       <p className="font-mono text-[12px] text-white/40">Empty folder · Node 20+ · test Farcaster account</p>
 
-      <div className="mt-4 inline-flex items-center gap-3 rounded-full bg-white py-2 pl-5 pr-2 shadow-[0_0_60px_-10px_rgba(255,255,255,0.25)] sm:gap-5 sm:pl-7">
+      <div className="h-pill mt-4 inline-flex items-center gap-3 rounded-full bg-white py-2 pl-5 pr-2 shadow-[0_0_60px_-10px_rgba(255,255,255,0.25)] sm:gap-5 sm:pl-7">
         <code className="font-mono text-[13px] text-ink sm:text-[18px]">
           <span className="select-none text-ink/35">$ </span>
           {quickstartCmd}
@@ -27,12 +27,14 @@ export function Commands() {
         type="button"
         aria-expanded={open}
         onClick={() => setOpen((o) => !o)}
-        className="mt-14 inline-flex items-center gap-1.5 text-[14px] text-white/55 transition-colors hover:text-white"
+        className="h-chev-trigger mt-14 inline-flex items-center gap-1.5 text-[14px] text-white/55 transition-colors hover:text-white"
       >
         Run your own node
-        <svg viewBox="0 0 16 16" className={`size-3.5 transition-transform ${open ? "rotate-180" : ""}`} aria-hidden>
-          <path d="m4 6 4 4 4-4" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" />
-        </svg>
+        <span className="h-chev inline-flex">
+          <svg viewBox="0 0 16 16" className={`size-3.5 transition-transform ${open ? "rotate-180" : ""}`} aria-hidden>
+            <path d="m4 6 4 4 4-4" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" />
+          </svg>
+        </span>
       </button>
 
       {open && (

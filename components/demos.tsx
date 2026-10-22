@@ -1,20 +1,88 @@
 "use client";
 
+import Image from "next/image";
 import { useRef, useState } from "react";
 import { Reveal } from "./reveal";
+import { Tilt } from "./tilt";
 
-// Drop the recordings into public/demos/ with these names, or point src at any hosted MP4.
-const demos = [
-  { title: "Building Castyard", src: "/demos/building-castyard.mp4" },
-  { title: "Vouch", src: "/demos/vouch.mp4" },
+// src: a YouTube link (unlisted is fine), an MP4 URL, a path to a file in public/,
+// or a Google Drive share link (low quality). Leave it empty to show "coming soon".
+// poster: an image in public/ shown before the video plays (optional).
+// length: shown beside the title, e.g. "2:54" (optional).
+type Demo = { title: string; note: string; src: string; poster?: string; length?: string };
+
+const demos: Demo[] = [
+  {
+    title: "Building Castyard",
+    note: "From an empty folder to a live client.",
+    src: "https://youtu.be/_cZi5oGPVNo",
+    poster: "/demos/building-castyard.jpg",
+    length: "2:54",
+  },
+  { title: "Vouchers", note: "People vouching for Castyard.", src: "" },
 ];
+
+/** YouTube watch, share, embed and shorts links → the video id. */
+function youtubeId(src: string) {
+  const m = src.match(/(?:youtu\.be\/|youtube(?:-nocookie)?\.com\/(?:watch\?(?:.*&)?v=|embed\/|shorts\/|live\/))([\w-]{11})/);
+  return m?.[1] ?? null;
+}
+
+function driveId(src: string) {
+  if (!/drive\.google\.com/.test(src)) return null;
+  return src.match(/\/d\/([\w-]+)/)?.[1] ?? new URL(src).searchParams.get("id");
+}
+
+/** Embed URL for hosted players. Drive is a last resort: it only streams a low-quality transcode. */
+function embedUrl(src: string) {
+  const yt = youtubeId(src);
+  if (yt) return `https://www.youtube-nocookie.com/embed/${yt}?autoplay=1&rel=0&playsinline=1`;
+  const drive = driveId(src);
+  if (drive) return `https://drive.google.com/file/d/${drive}/preview`;
+  return null;
+}
+
+/** YouTube/Drive links play in their embedded player; any other MP4 URL plays in our own <video>. */
+function Player({ title, src, poster }: { title: string; src: string; poster?: string }) {
+  const [failed, setFailed] = useState(false);
+  const embed = src ? embedUrl(src) : null;
+
+  if (!src || failed) {
+    return (
+      <p className="absolute inset-0 grid place-items-center font-mono text-[13px] text-white/45">coming soon</p>
+    );
+  }
+  if (embed) {
+    return (
+      <iframe
+        src={embed}
+        title={title}
+        allow="autoplay; encrypted-media; fullscreen; picture-in-picture"
+        allowFullScreen
+        className="absolute inset-0 size-full border-0"
+      />
+    );
+  }
+  return (
+    <video
+      src={src}
+      poster={poster}
+      autoPlay
+      controls
+      playsInline
+      preload="auto"
+      onError={() => setFailed(true)}
+      className="absolute inset-0 size-full bg-black object-contain"
+    />
+  );
+}
 
 export function Demos() {
   return (
-    <section id="demos" className="bg-paper py-24 text-ink sm:py-28">
-      <div className="mx-auto grid max-w-[1180px] gap-x-6 gap-y-10 px-5 sm:px-8 md:grid-cols-2">
+    <section id="demos" className="flex min-h-[100svh] items-center bg-paper py-24 text-ink">
+      <div className="mx-auto grid w-full max-w-[1180px] gap-x-6 gap-y-12 px-5 sm:px-8 md:grid-cols-2">
         {demos.map((d, i) => (
-          <Reveal key={d.src} delay={i * 100}>
+          <Reveal key={d.title} delay={i * 100}>
             <DemoCard {...d} />
           </Reveal>
         ))}
@@ -27,8 +95,7 @@ export function Demos() {
 export function WatchDemo() {
   const dialog = useRef<HTMLDialogElement>(null);
   const [open, setOpen] = useState(false);
-  const [missing, setMissing] = useState(false);
-  const { title, src } = demos[0];
+  const { title, src, poster } = demos[0];
 
   const close = () => dialog.current?.close();
 
@@ -40,9 +107,9 @@ export function WatchDemo() {
           dialog.current?.showModal();
           setOpen(true);
         }}
-        className="inline-flex items-center gap-2.5 rounded-full border border-white/15 bg-white/[0.04] py-1.5 pl-1.5 pr-5 text-[14px] text-white/85 transition-colors hover:border-white/30 hover:text-white"
+        className="h-watch inline-flex items-center gap-2.5 rounded-full border border-white/15 bg-white/[0.04] py-1.5 pl-1.5 pr-5 text-[14px] text-white/85 hover:border-white/30 hover:text-white"
       >
-        <span className="grid size-7 place-items-center rounded-full bg-white text-ink">
+        <span className="h-watch-dot grid size-7 place-items-center rounded-full bg-white text-ink">
           <svg viewBox="0 0 12 12" className="ml-0.5 size-2.5" aria-hidden>
             <path d="M2.5 1.5v9l7.5-4.5z" fill="currentColor" />
           </svg>
@@ -58,19 +125,8 @@ export function WatchDemo() {
         className="m-auto w-[min(1100px,92vw)] overflow-visible bg-transparent p-0 backdrop:bg-black/85 backdrop:backdrop-blur-sm"
       >
         <div className="relative aspect-video overflow-hidden rounded-[20px] bg-ink">
-          {open && !missing && (
-            <video
-              src={src}
-              autoPlay
-              controls
-              playsInline
-              onError={() => setMissing(true)}
-              className="absolute inset-0 size-full object-cover"
-            />
-          )}
-          {missing && (
-            <p className="absolute inset-0 grid place-items-center font-mono text-[13px] text-white/45">coming soon</p>
-          )}
+          {/* Unmounted when closed, so playback stops. */}
+          {open && <Player title={title} src={src} poster={poster} />}
         </div>
         <button
           type="button"
@@ -87,40 +143,48 @@ export function WatchDemo() {
   );
 }
 
-function DemoCard({ title, src }: { title: string; src: string }) {
-  const [state, setState] = useState<"poster" | "playing" | "missing">("poster");
+function DemoCard({ title, note, src, poster, length }: Demo) {
+  const [playing, setPlaying] = useState(false);
 
   return (
     <figure>
-      <div className="relative aspect-video overflow-hidden rounded-[20px] bg-ink">
-        {state === "playing" ? (
-          <video
-            src={src}
-            autoPlay
-            controls
-            playsInline
-            onError={() => setState("missing")}
-            className="absolute inset-0 size-full object-cover"
-          />
+      <Tilt disabled={playing} className="relative aspect-video overflow-hidden rounded-[20px] bg-ink">
+        {playing ? (
+          <Player title={title} src={src} poster={poster} />
         ) : (
           <button
             type="button"
-            onClick={() => setState("playing")}
+            onClick={() => setPlaying(true)}
             aria-label={`Play ${title}`}
             className="group absolute inset-0 grid place-items-center bg-[radial-gradient(70%_70%_at_50%_50%,rgba(255,255,255,0.08),transparent)]"
           >
-            <span className="grid size-16 place-items-center rounded-full bg-white text-ink transition-transform duration-300 group-hover:scale-105">
+            {poster && (
+              <>
+                <Image
+                  src={poster}
+                  alt=""
+                  fill
+                  sizes="(min-width: 768px) 50vw, 100vw"
+                  className="object-cover"
+                />
+                <span className="absolute inset-0 bg-black/25 transition-colors group-hover:bg-black/15" />
+              </>
+            )}
+            <span className="relative grid size-16 place-items-center rounded-full bg-white text-ink transition-transform duration-300 group-hover:scale-105">
               <svg viewBox="0 0 12 12" className="ml-1 size-4" aria-hidden>
                 <path d="M2.5 1.5v9l7.5-4.5z" fill="currentColor" />
               </svg>
             </span>
-            {state === "missing" && (
-              <span className="absolute bottom-5 font-mono text-[12px] text-white/45">coming soon</span>
-            )}
           </button>
         )}
-      </div>
-      <figcaption className="mt-4 text-[16px] font-medium tracking-[-0.01em]">{title}</figcaption>
+      </Tilt>
+      <figcaption className="mt-5 px-1">
+        <span className="flex items-baseline justify-between gap-4">
+          <span className="text-[19px] font-medium tracking-[-0.02em]">{title}</span>
+          <span className="text-[14px] tabular-nums text-ink/40">{src ? length : "Coming soon"}</span>
+        </span>
+        <span className="mt-1 block text-[14.5px] text-ink/50">{note}</span>
+      </figcaption>
     </figure>
   );
 }

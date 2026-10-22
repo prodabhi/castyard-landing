@@ -2,7 +2,6 @@ import { Commands } from "./commands";
 import { WatchDemo } from "./demos";
 import { Wordmark } from "./primitives";
 import { Reveal } from "./reveal";
-import { version } from "./steps";
 
 export function Nav() {
   return (
@@ -11,7 +10,16 @@ export function Nav() {
         <a href="#" aria-label="Castyard home" className="text-white">
           <Wordmark />
         </a>
-        <span className="font-mono text-[12px] text-white/40">v{version}</span>
+        <div className="flex items-center gap-1 text-[14px] text-white/60">
+          {[
+            { label: "Demo", href: "#demos" },
+            { label: "FAQ", href: "#faq" },
+          ].map((l) => (
+            <a key={l.href} href={l.href} className="h-link rounded-md px-3 py-1.5 transition-colors hover:text-white">
+              {l.label}
+            </a>
+          ))}
+        </div>
       </nav>
     </header>
   );
