@@ -7,7 +7,9 @@
   /* Two tones: near-black and warm off-white */
   --color-ink: #0a0a0a;
   --color-paper: #f5f4f0;
+
 }
+
 
 /* transitions.dev motion tokens (subset this page uses) */
 :root {
@@ -131,7 +133,8 @@ body {
   transition: transform var(--duration-fast) var(--ease-smooth-out);
 }
 .h-faq-q,
-.h-chev {
+.h-chev,
+.h-arrow {
   transition: transform var(--duration-fast) var(--ease-smooth-out);
 }
 .h-faq-icon {
@@ -153,6 +156,7 @@ body {
   .h-faq:hover .h-faq-q { transform: translateX(var(--distance-micro)); }
   .h-faq:hover .h-faq-icon { color: rgba(255, 255, 255, 0.9); }
   .h-chev-trigger:hover .h-chev { transform: translateY(2px); }
+  .h-arrow-trigger:hover .h-arrow { transform: translateX(var(--distance-micro)); }
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -169,13 +173,15 @@ body {
   .h-watch-dot,
   .h-link::after,
   .h-faq-q,
-  .h-chev {
+  .h-chev,
+  .h-arrow {
     transition: none;
   }
   .h-pill:hover,
   .h-watch:hover .h-watch-dot,
   .h-faq:hover .h-faq-q,
-  .h-chev-trigger:hover .h-chev {
+  .h-chev-trigger:hover .h-chev,
+  .h-arrow-trigger:hover .h-arrow {
     transform: none;
   }
 }

@@ -1,4 +1,4 @@
-const version = "0.1.1";
+export const version = "0.1.1";
 const pkg = `castyard@${version}`;
 
 export const quickstartCmd = `npx --yes ${pkg} client`;

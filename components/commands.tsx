@@ -8,7 +8,7 @@ export function Commands() {
 
   return (
     <div>
-      <p className="font-mono text-[12px] text-white/40">Empty folder · Node 20+ · test Farcaster account</p>
+      <p className="font-mono text-[12px] text-white/40">Node 20+ · test Farcaster account</p>
 
       <div className="h-pill mt-4 inline-flex items-center gap-3 rounded-full bg-white py-2 pl-5 pr-2 shadow-[0_0_60px_-10px_rgba(255,255,255,0.25)] sm:gap-5 sm:pl-7">
         <code className="font-mono text-[13px] text-ink sm:text-[18px]">
@@ -57,11 +57,14 @@ export function Commands() {
   );
 }
 
-function CopyButton({
+export function CopyButton({
   text,
+  label = false,
   className = "size-8 text-white/55 hover:bg-white/10 hover:text-white",
 }: {
   text: string;
+  /** Show a "Copy" / "Copied" label beside the icon. */
+  label?: boolean;
   className?: string;
 }) {
   const [copied, setCopied] = useState(false);
@@ -78,9 +81,9 @@ function CopyButton({
           // Clipboard can be blocked (insecure origin, permissions); nothing to do.
         }
       }}
-      className={`grid shrink-0 place-items-center rounded-full transition-colors ${className}`}
+      className={`inline-flex shrink-0 items-center justify-center gap-1.5 rounded-full transition-colors ${className}`}
     >
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" className="size-4" aria-hidden>
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" className="size-4 shrink-0" aria-hidden>
         {copied ? (
           <path d="m5 12.5 4.5 4.5L19 7.5" />
         ) : (
@@ -90,6 +93,7 @@ function CopyButton({
           </>
         )}
       </svg>
+      {label && <span aria-hidden>{copied ? "Copied" : "Copy"}</span>}
     </button>
   );
 }

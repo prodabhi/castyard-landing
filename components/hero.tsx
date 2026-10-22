@@ -1,3 +1,4 @@
+import Link from "next/link";
 import { Commands } from "./commands";
 import { WatchDemo } from "./demos";
 import { Wordmark } from "./primitives";
@@ -19,6 +20,9 @@ export function Nav() {
               {l.label}
             </a>
           ))}
+          <Link href="/docs" className="h-link rounded-md px-3 py-1.5 transition-colors hover:text-white">
+            Docs
+          </Link>
         </div>
       </nav>
     </header>
