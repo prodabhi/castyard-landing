@@ -8,23 +8,19 @@ export function Commands() {
 
   return (
     <div>
-      <p className="font-mono text-[12px] text-ink/45">Needs Node.js 20+ and a test Farcaster account</p>
-
-      <div className="mt-3 inline-flex items-center gap-3 rounded-full border border-ink/15 bg-white py-2 pl-5 pr-2 sm:gap-5 sm:pl-7">
-        <code className="font-mono text-[13px] text-ink sm:text-[17px]">
-          <span className="select-none text-ink/35">$ </span>
+      <div className="inline-flex items-center gap-3 rounded-full border-[1.5px] border-ink bg-ink py-2 pl-5 pr-2 sm:gap-5 sm:pl-7">
+        <code className="whitespace-nowrap font-mono text-[12px] text-white min-[380px]:text-[13px] sm:text-[17px]">
+          <span className="select-none text-white/45">$ </span>
           {quickstartCmd}
         </code>
-        <CopyButton text={quickstartCmd} className="size-9 text-ink/50 hover:bg-ink/[0.06] hover:text-ink sm:size-10" />
+        <CopyButton text={quickstartCmd} className="size-9 text-white/70 hover:bg-white/15 hover:text-white sm:size-10" />
       </div>
-
-      <p className="mt-3 font-mono text-[12px] text-ink/45">then open localhost:3000</p>
 
       <button
         type="button"
         aria-expanded={open}
         onClick={() => setOpen((o) => !o)}
-        className="mt-10 inline-flex items-center gap-1.5 text-[14px] text-ink/60 hover:text-ink"
+        className="mx-auto mt-8 flex items-center gap-1.5 text-[14px] text-ink/60 hover:text-ink"
       >
         Run your own node
         <svg viewBox="0 0 16 16" className={`size-3.5 ${open ? "rotate-180" : ""}`} aria-hidden>
@@ -34,14 +30,14 @@ export function Commands() {
 
       {open && (
         <div className="mx-auto mt-5 max-w-[620px] text-left">
-          <ol className="divide-y divide-ink/[0.08] rounded-2xl border border-ink/10">
+          <ol className="space-y-2">
             {nodeCmds.map((cmd) => (
-              <li key={cmd} className="flex items-center gap-3 py-1.5 pl-4 pr-1.5">
-                <code className="min-w-0 flex-1 overflow-x-auto whitespace-nowrap font-mono text-[12px] text-ink/85 [scrollbar-width:none] sm:text-[13px]">
-                  <span className="select-none text-ink/35">$ </span>
+              <li key={cmd} className="flex items-center gap-3 rounded-full bg-ink py-1.5 pl-5 pr-1.5">
+                <code className="min-w-0 flex-1 overflow-x-auto whitespace-nowrap font-mono text-[12px] text-white [scrollbar-width:none] sm:text-[13px]">
+                  <span className="select-none text-white/45">$ </span>
                   {cmd}
                 </code>
-                <CopyButton text={cmd} className="size-8 text-ink/50 hover:bg-ink/[0.06] hover:text-ink" />
+                <CopyButton text={cmd} className="size-8 text-white/70 hover:bg-white/15 hover:text-white" />
               </li>
             ))}
           </ol>

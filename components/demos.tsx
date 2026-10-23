@@ -14,13 +14,13 @@ type Demo = { title: string; note: string; src: string; poster?: string; length?
 const demos: Demo[] = [
   {
     title: "Building Castyard",
-    note: "From scratch to localhost:3000.",
+    note: "From scratch to a working demo.",
     src: "https://youtu.be/_cZi5oGPVNo",
     poster: "/demos/building-castyard.jpg",
     length: "2:54",
   },
   {
-    title: "Vouchers",
+    title: "Voucher's demo",
     note: "Someone else trying it out.",
     src: "https://www.loom.com/share/1ee2171b037b42e3aa4c41faba30119c",
     poster: "/demos/vouchers.jpg",
@@ -96,7 +96,7 @@ export function Demos() {
         <div className="text-center">
           <h2 className="display text-[clamp(32px,4.4vw,48px)]">See it work</h2>
           <p className="mx-auto mt-3 max-w-[34rem] text-balance font-serif text-[clamp(17px,1.8vw,21px)] leading-[1.45] text-ink/75">
-            Me setting it up, and someone else trying it on their laptop.
+            Me setting it up, and someone else trying it on their own.
           </p>
         </div>
         <div className="mt-12 grid gap-x-6 gap-y-10 md:grid-cols-2">
@@ -110,29 +110,72 @@ export function Demos() {
   );
 }
 
-/** Hero button that plays the build demo in a full-screen player. */
+/**
+ * Hero button that plays the build demo in a full-screen player. On mouse hover, a small muted
+ * preview loops above it; clicking the preview opens the full video too.
+ */
 export function WatchDemo() {
   const dialog = useRef<HTMLDialogElement>(null);
   const [open, setOpen] = useState(false);
-  const { title, src, poster } = demos[0];
+  const [peek, setPeek] = useState(false);
+  const { title, src, poster, length } = demos[0];
 
+  const show = () => {
+    setPeek(false);
+    dialog.current?.showModal();
+    setOpen(true);
+  };
   const close = () => dialog.current?.close();
 
   return (
     <>
-      <button
-        type="button"
-        onClick={() => {
-          dialog.current?.showModal();
-          setOpen(true);
-        }}
-        className={pillLight}
+      <div
+        className="relative inline-block"
+        onPointerEnter={(e) => e.pointerType === "mouse" && setPeek(true)}
+        onPointerLeave={() => setPeek(false)}
       >
-        <svg viewBox="0 0 12 12" className="size-3" aria-hidden>
-          <path d="M2.5 1.5v9l7.5-4.5z" fill="currentColor" />
-        </svg>
-        Watch the demo
-      </button>
+        {/* pl-3 keeps the hover area continuous between the button and the preview */}
+        <div data-open={peek} aria-hidden={!peek} className="peek absolute left-full top-1/2 z-10 pl-3">
+          <button
+            type="button"
+            tabIndex={-1}
+            onClick={show}
+            aria-label={`Play ${title}`}
+            className="relative block w-[300px] overflow-hidden rounded-xl border border-ink/10 bg-ink shadow-[0_12px_32px_-12px_rgba(0,0,0,0.35)]"
+          >
+            <span className="relative block aspect-video">
+              {poster && <Image src={poster} alt="" fill sizes="300px" className="object-cover" />}
+              {/* Mounted only while open, so the clip loads on first hover and restarts each time. */}
+              {peek && (
+                <video
+                  src="/demos/preview.mp4"
+                  autoPlay
+                  muted
+                  loop
+                  playsInline
+                  className="absolute inset-0 size-full object-cover"
+                />
+              )}
+            </span>
+            <span className="absolute bottom-2 left-2 rounded-md bg-black/70 px-1.5 py-0.5 font-sans text-[11.5px] text-white">
+              {title} · {length}
+            </span>
+          </button>
+        </div>
+
+        <button
+          type="button"
+          onClick={show}
+          onFocus={(e) => e.currentTarget.matches(":focus-visible") && setPeek(true)}
+          onBlur={() => setPeek(false)}
+          className={pillLight}
+        >
+          <svg viewBox="0 0 12 12" className="size-3" aria-hidden>
+            <path d="M2.5 1.5v9l7.5-4.5z" fill="currentColor" />
+          </svg>
+          Watch the demo
+        </button>
+      </div>
 
       <dialog
         ref={dialog}
@@ -195,10 +238,12 @@ function DemoCard({ title, note, src, poster, length }: Demo) {
           </button>
         )}
       </div>
-      <figcaption className="mt-4 text-center">
-        <span className="font-serif text-[20px] font-medium">{title}</span>
-        <span className="ml-2 text-[14px] tabular-nums text-ink/45">{src ? length : "Coming soon"}</span>
-        <span className="mt-1 block text-[14.5px] text-ink/60">{note}</span>
+      <figcaption className="mt-3 flex items-start justify-between gap-4 px-3 text-left">
+        <span className="min-w-0">
+          <span className="block font-serif text-[20px] font-medium">{title}</span>
+          <span className="mt-0.5 block text-[14.5px] text-ink/60">{note}</span>
+        </span>
+        <span className="shrink-0 pt-1 text-[14px] tabular-nums text-ink/45">{src ? length : "Coming soon"}</span>
       </figcaption>
     </figure>
   );

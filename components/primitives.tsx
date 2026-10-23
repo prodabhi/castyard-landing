@@ -41,8 +41,6 @@ export function Arrow({ className = "size-3.5" }: { className?: string }) {
   );
 }
 
-/* Pill buttons, as on ns.com: a dark primary and an outlined secondary. */
-export const pillDark =
-  "inline-flex items-center gap-1.5 rounded-full bg-ink px-5 py-2.5 text-[15px] font-medium text-white hover:bg-black";
+/* Outlined pill button, as on ns.com. */
 export const pillLight =
   "inline-flex items-center gap-2 rounded-full border border-ink/15 bg-white px-5 py-2.5 text-[15px] font-medium text-ink hover:border-ink/35";

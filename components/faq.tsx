@@ -4,7 +4,7 @@ import { Footer } from "./footer";
 const faqs = [
   {
     q: "What is Castyard?",
-    a: "A Farcaster app that runs on your own laptop. Cast, follow, like, and hide posts by the app that made them.",
+    a: "A Farcaster client you run yourself. Cast, follow, like, and hide posts by the app that made them.",
   },
   {
     q: "What do I need?",
