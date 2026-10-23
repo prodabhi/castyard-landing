@@ -5,14 +5,14 @@ export function BeforeYouStart() {
     <Section id="before-you-start" title="Before you start">
       <H3 id="fids">FIDs</H3>
       <P>
-        Every Farcaster account is a number, its <Strong>FID</Strong>. Your username, casts and follows hang off it. My
+        Every Farcaster account is a number, its <Strong>FID</Strong>. Your username, casts and follows are all linked to it. My
         test account is @halku, FID 3356451.
       </P>
 
       <H3 id="storage">Storage rent</H3>
       <P>
-        The network only keeps messages for accounts that rent storage. One unit lasts a year. My account, made in the
-        Farcaster app, came with one. Check yours with your own FID:
+        Farcaster only keeps your posts if your account pays for storage. One unit lasts a year. My account, made in
+        the Farcaster app, came with one. Check yours with your own FID:
       </P>
       <Terminal
         title="your laptop"
@@ -31,12 +31,12 @@ export function BeforeYouStart() {
           <>Use a test account. Never your main one.</>,
           <>Only type a recovery phrase into software whose code you’ve read.</>,
           <>
-            castyard reads the phrase once, at a hidden prompt, signs one message with it, and forgets it. It never sends
-            or saves it. The code is one file:{" "}
+            castyard asks for the phrase once, at a hidden prompt, uses it to approve itself, and forgets it.
+            It never sends or saves it. The code is one file:{" "}
             <A href="https://github.com/prodabhi/castyard/blob/main/src/add-key.js">src/add-key.js</A>.
           </>,
           <>
-            It saves only its own app key, in <C>~/.castyard/&lt;fid&gt;.key</C>.
+            It saves only its own key, in <C>~/.castyard/&lt;fid&gt;.key</C>.
           </>,
         ]}
       />

@@ -4,7 +4,7 @@ import { Footer } from "./footer";
 const faqs = [
   {
     q: "What is Castyard?",
-    a: "A Farcaster client you run yourself. Cast, follow, like and filter by app. Every read and post goes through a Snapchain node.",
+    a: "A Farcaster app that runs on your own laptop. Cast, follow, like, and hide posts by the app that made them.",
   },
   {
     q: "What do I need?",
@@ -16,7 +16,7 @@ const faqs = [
   },
   {
     q: "Do I need my own node?",
-    a: "No. It’s optional. The quickstart runs with a single command.",
+    a: "No. Start with mine. Run your own later if you want to.",
   },
   {
     q: "What does running my own node take?",

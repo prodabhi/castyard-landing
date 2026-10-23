@@ -13,8 +13,8 @@ export function Provision() {
         ]}
       />
       <P>
-        This creates a VM in Mumbai and opens ports 3381 to 3383 for Snapchain. Change the defaults with env vars, like{" "}
-        <C>MACHINE=</C> or <C>DISK_GB=</C>.
+        This rents a server (a VM) on Google Cloud in Mumbai and opens the ports your node needs. To change the machine
+        or disk size, set <C>MACHINE=</C> or <C>DISK_GB=</C>.
       </P>
       <Table
         head={["What", "My node", "Per day"]}
@@ -27,13 +27,14 @@ export function Provision() {
 
       <H3 id="free-trial">The free trial is too small</H3>
       <P>
-        Google’s free trial caps SSD at 500 GB. The snapshot alone is about 506 GB. To fix it:
+        Google’s free trial only allows 500 GB of disk. Farcaster’s data alone is about 506 GB. To fix it:
       </P>
       <List
         items={[
           <>Upgrade billing to paid. The free credit carries over.</>,
           <>
-            Request 2048 GB of <C>SSD-TOTAL-GB-per-project-region</C> quota. Mine was approved in about 50 seconds.
+            Ask Google for more disk: request 2048 GB of the <C>SSD-TOTAL-GB-per-project-region</C> quota. Mine was
+            approved in about 50 seconds.
           </>,
         ]}
       />

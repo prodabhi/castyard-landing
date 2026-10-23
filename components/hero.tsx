@@ -38,7 +38,7 @@ export function Hero() {
     <section className="bg-white px-5 pb-24 pt-20 text-center sm:px-8 sm:pt-28">
       <h1 className="display mx-auto text-[clamp(40px,6.4vw,72px)] text-ink">Farcaster, on your own node.</h1>
       <p className="mx-auto mt-5 max-w-[36rem] text-balance font-serif text-[clamp(19px,2.2vw,25px)] leading-[1.45] text-ink/80">
-        A Farcaster client on your laptop. It reads and posts through a Snapchain node: mine, or your own.
+        Use Farcaster from your laptop with one command. It connects to my server until you run your own.
       </p>
       <div className="mt-9 flex flex-wrap items-center justify-center gap-3">
         <Link href="/docs/quickstart" className={pillDark}>

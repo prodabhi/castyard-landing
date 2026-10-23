@@ -3,7 +3,7 @@ import { Diagram, Section } from "@/components/docs/blocks";
 
 export const metadata: Metadata = {
   title: "Introduction · Castyard docs",
-  description: "Run your own Snapchain read node on Google Cloud and a Farcaster client on your laptop.",
+  description: "Use Farcaster from your laptop, then run your own node.",
 };
 
 export default function Introduction() {
@@ -11,7 +11,7 @@ export default function Introduction() {
     <Section
       id="introduction"
       title="Farcaster on your own node"
-      lead="castyard is a Farcaster client that runs on your laptop. It reads and posts through a Snapchain read node: mine, or one you run yourself. These docs set up both."
+      lead="castyard lets you use Farcaster from your laptop. It connects to a node: a server that keeps a copy of all Farcaster data. Start with mine, then run your own."
     >
       <figure className="mt-8">
         <div className="aspect-video overflow-hidden rounded-xl border border-fg/10 bg-black">

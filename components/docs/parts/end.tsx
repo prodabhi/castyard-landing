@@ -8,7 +8,7 @@ export function Troubleshooting() {
         rows={[
           [<C key="m">{"can't reach the node"}</C>, "Your node is still loading. Use mine meanwhile."],
           [<C key="m">{"doesn't own fid"}</C>, "Wrong recovery phrase or FID."],
-          [<C key="m">Not included after 3 attempts</C>, <>Check <C>blockDelay</C>, or switch to my node.</>],
+          [<C key="m">Not included after 3 attempts</C>, <>Your node may be behind. Check <C>blockDelay</C>, or switch to mine.</>],
           ["Quota error on provision", <>Upgrade from the free trial. See <A href="/docs/provision#free-trial">Provision</A>.</>],
         ]}
       />

@@ -8,7 +8,7 @@ export function Commands() {
 
   return (
     <div>
-      <p className="font-mono text-[12px] text-ink/45">Node 20+ · test Farcaster account</p>
+      <p className="font-mono text-[12px] text-ink/45">Needs Node.js 20+ and a test Farcaster account</p>
 
       <div className="mt-3 inline-flex items-center gap-3 rounded-full border border-ink/15 bg-white py-2 pl-5 pr-2 sm:gap-5 sm:pl-7">
         <code className="font-mono text-[13px] text-ink sm:text-[17px]">
