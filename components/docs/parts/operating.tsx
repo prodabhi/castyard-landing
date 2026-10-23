@@ -6,17 +6,17 @@ export function Operating() {
       <List
         items={[
           <>
-            <Strong>Upgrades:</Strong> the installer adds a weekly cron job. To upgrade now, run{" "}
+            <Strong>Updates:</Strong> your node updates itself once a week. To update now, run{" "}
             <C>cd ~/snapchain && ./snapchain.sh upgrade</C> on the VM.
           </>,
           <>
-            <Strong>Health:</Strong> <C>blockDelay</C> under 10 on every shard, from <C>/v1/info</C>.
+            <Strong>Health:</Strong> your node is healthy when every <C>blockDelay</C> in <C>/v1/info</C> is under 10.
           </>,
           <>
             <Strong>Restarts:</Strong> Docker restarts the node after a crash or reboot, and it catches up by itself.
           </>,
           <>
-            <Strong>Disk:</Strong> the database is 520 GiB and grows daily.
+            <Strong>Disk:</Strong> the data is 520 GiB and grows every day.
           </>,
         ]}
       />
@@ -39,7 +39,7 @@ export function Operating() {
         head={["Port", "What", "Open to"]}
         rows={[
           ["3381", "HTTP API", "Anyone"],
-          ["3382", "Gossip with other nodes", "Anyone"],
+          ["3382", "Talking to other nodes", "Anyone"],
           ["3383", "gRPC API", "Anyone"],
         ]}
       />

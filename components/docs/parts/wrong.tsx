@@ -14,7 +14,7 @@ export function WhatWentWrong() {
             A VM restart made the snapshot download start over (
             <A href="https://github.com/farcasterxyz/snapchain/issues/1064">#1064</A>).
           </>,
-          <>My read node said OK to an invalid message. That’s why castyard confirms every write.</>,
+          <>My node said OK to a broken message that never got in. That’s why castyard checks every post landed.</>,
           <>
             Unfollow then follow failed, because a library reused the same timestamp. castyard now builds each message
             fresh.

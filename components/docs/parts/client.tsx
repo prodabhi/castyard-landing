@@ -21,10 +21,9 @@ export function Client() {
 
       <H3 id="app-keys">App keys</H3>
       <P>
-        An <Strong>app key</Strong> is a key castyard makes on your laptop. It signs your casts, likes and follows. The
-        custody address approves it with a gasless <C>KEY_ADD</C> message: no transaction, no fee. The key can only
-        cast, like and follow. It expires after 30 days without use. To stop using it, delete{" "}
-        <C>~/.castyard/&lt;fid&gt;.key</C>.
+        An <Strong>app key</Strong> is a key castyard makes on your laptop. It signs your casts, likes and follows. Your
+        custody address approves it once, for free (a <C>KEY_ADD</C> message, no gas). The key can only cast, like and
+        follow, and it expires after 30 days without use. To stop using it, delete <C>~/.castyard/&lt;fid&gt;.key</C>.
       </P>
 
       <H3 id="messages">Messages</H3>
@@ -39,8 +38,8 @@ export function Client() {
         alt="Life of a cast: castyard signs and sends it, the read node checks the signer and gossips it, the validators put it in a block, and castyard reads it back as confirmed."
       />
       <P>
-        A read node only relays your message. The validators decide if it gets in. So castyard reads every message
-        back: “sent” first, then “confirmed”. My first cast confirmed in 4 seconds.
+        Your node passes each post on to the validators, and they decide if it gets in. So castyard checks: it shows
+        “sent” first, then “confirmed” once the post is really there. My first cast confirmed in 4 seconds.
       </P>
 
       <H3 id="filter">Filter by app</H3>
@@ -49,8 +48,8 @@ export function Client() {
         alt="A signer key signs each cast. signersByFid maps the key to the app that requested it. Your checkboxes show or hide casts by app."
       />
       <P>
-        Each cast records the app key that signed it, and each key records the app that asked for it. castyard shows one
-        checkbox per app, so you can hide casts from any app.
+        Every post records which app made it. castyard shows one checkbox per app, so you can hide posts from any
+        app.
       </P>
     </Section>
   );

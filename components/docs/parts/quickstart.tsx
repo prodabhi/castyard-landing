@@ -8,10 +8,10 @@ export function Quickstart() {
     <Section id="quickstart" title="Quickstart">
       <Note kind="warn">
         <p>
-          Syncing your own node can take 24 hours. Until then, run the client on your laptop against my node.
+          Your own node can take 24 hours to get ready. Until then, castyard uses mine.
         </p>
       </Note>
-      <P>You need Node.js 20+ and a test Farcaster account with storage. One command:</P>
+      <P>You need Node.js 20+ and a test Farcaster account. Then run one command:</P>
       <Terminal
         title="your laptop"
         lines={[
@@ -25,9 +25,9 @@ export function Quickstart() {
         lines={[
           { kind: "comment", text: "rent a VM on Google Cloud" },
           { kind: "cmd", text: provision },
-          { kind: "comment", text: "start a Snapchain read node on it" },
+          { kind: "comment", text: "start your node on it" },
           { kind: "cmd", text: node },
-          { kind: "comment", text: "once it's synced, point the client at it" },
+          { kind: "comment", text: "once it's ready, point castyard at it" },
           { kind: "cmd", text: client },
         ]}
       />
