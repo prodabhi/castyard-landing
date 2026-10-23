@@ -4,11 +4,13 @@ import { Hero, Nav } from "@/components/hero";
 
 export default function Home() {
   return (
-    <main className="overflow-x-clip">
+    <>
       <Nav />
-      <Hero />
-      <Demos />
-      <Faq />
-    </main>
+      <main className="overflow-x-clip">
+        <Hero />
+        <Demos />
+        <Faq />
+      </main>
+    </>
   );
 }

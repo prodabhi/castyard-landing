@@ -1,52 +1,32 @@
-import Link from "next/link";
-import { DocsSwitcher, PageFoot } from "@/components/docs/docs-nav";
-import { Wordmark } from "@/components/primitives";
+import { OnThisPage } from "@/components/docs/on-this-page";
+import { MobileNav, Sidebar } from "@/components/docs/sidebar";
+import { Footer } from "@/components/footer";
+import { Nav } from "@/components/hero";
 
-const links = [
-  { label: "Demo", href: "/#demos" },
-  { label: "FAQ", href: "/#faq" },
-];
+/* One fixed frame: 220px sidebar + 640px page (+ 180px "On this page" on wide screens). */
+const frame = "mx-auto w-full max-w-[972px] px-4 sm:px-8 xl:max-w-[1200px]";
 
 export default function DocsLayout({ children }: LayoutProps<"/docs">) {
   return (
-    <div className="relative min-h-screen overflow-x-clip bg-ink text-white">
-      {/* Same soft glow as the landing hero */}
-      <div
-        aria-hidden
-        className="pointer-events-none absolute inset-x-0 top-0 h-[640px]"
-        style={{ background: "radial-gradient(55% 60% at 50% 0%, rgba(255,255,255,0.07), transparent 70%)" }}
-      />
+    <div className="docs relative min-h-screen overflow-x-clip">
+      <Nav frame={frame} />
+      <MobileNav />
 
-      <header className="sticky top-0 z-40 border-b border-white/[0.06] bg-ink/70 backdrop-blur-md">
-        <nav className="mx-auto flex h-16 max-w-[1180px] items-center justify-between px-5 sm:px-8">
-          <Link href="/" aria-label="Castyard home" className="text-white">
-            <Wordmark />
-          </Link>
-          <div className="flex items-center gap-1 text-[14px] text-white/60">
-            {links.map((l) => (
-              <Link key={l.href} href={l.href} className="h-link rounded-md px-3 py-1.5 transition-colors hover:text-white">
-                {l.label}
-              </Link>
-            ))}
-            <span aria-current="page" className="rounded-md px-3 py-1.5 text-white">
-              Docs
-            </span>
+      <div className={`${frame} lg:grid lg:grid-cols-[220px_640px] lg:gap-12 xl:grid-cols-[220px_640px_180px]`}>
+        <aside className="hidden lg:block">
+          <div className="sticky top-16 max-h-[calc(100vh-4rem)] overflow-y-auto py-10 pr-2">
+            <Sidebar />
           </div>
-        </nav>
-      </header>
+        </aside>
+        <main className="mx-auto w-full min-w-0 max-w-[640px] pb-20 pt-8 sm:pt-10 lg:mx-0">{children}</main>
+        <aside className="hidden xl:block">
+          <div className="sticky top-16 py-10">
+            <OnThisPage />
+          </div>
+        </aside>
+      </div>
 
-      <main className="relative mx-auto max-w-[760px] px-5 pb-24 pt-12 sm:px-8 sm:pt-16">
-        <DocsSwitcher />
-        <div className="mt-12">{children}</div>
-        <PageFoot />
-      </main>
-
-      <footer className="mx-auto max-w-[1180px] px-5 sm:px-8">
-        <div className="flex items-center justify-between border-t border-white/10 py-7">
-          <Wordmark className="text-white/80" />
-          <span className="text-[13px] text-white/40">© 2026</span>
-        </div>
-      </footer>
+      <Footer frame={frame} />
     </div>
   );
 }

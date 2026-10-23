@@ -25,9 +25,24 @@ export function Wordmark({ className = "" }: { className?: string }) {
   return (
     <span className={`inline-flex items-center gap-2 ${className}`}>
       <Mark className="size-[22px]" />
-      <span className="text-[19px] font-semibold tracking-[-0.03em]">
+      <span className="font-serif text-[21px] font-medium tracking-[-0.02em]">
         Castyard
       </span>
     </span>
   );
 }
+
+/** The arrow on ns.com-style pill buttons: "Get started →". */
+export function Arrow({ className = "size-3.5" }: { className?: string }) {
+  return (
+    <svg viewBox="0 0 16 16" className={className} aria-hidden>
+      <path d="M3 8h10M9 4l4 4-4 4" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" />
+    </svg>
+  );
+}
+
+/* Pill buttons, as on ns.com: a dark primary and an outlined secondary. */
+export const pillDark =
+  "inline-flex items-center gap-1.5 rounded-full bg-ink px-5 py-2.5 text-[15px] font-medium text-white hover:bg-black";
+export const pillLight =
+  "inline-flex items-center gap-2 rounded-full border border-ink/15 bg-white px-5 py-2.5 text-[15px] font-medium text-ink hover:border-ink/35";
