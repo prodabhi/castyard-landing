@@ -14,14 +14,14 @@ type Demo = { title: string; note: string; src: string; poster?: string; length?
 const demos: Demo[] = [
   {
     title: "Building Castyard",
-    note: "From an empty folder to a live client.",
+    note: "From scratch to localhost:3000.",
     src: "https://youtu.be/_cZi5oGPVNo",
     poster: "/demos/building-castyard.jpg",
     length: "2:54",
   },
   {
     title: "Vouchers",
-    note: "People vouching for Castyard.",
+    note: "Someone else trying it out.",
     src: "https://www.loom.com/share/1ee2171b037b42e3aa4c41faba30119c",
     poster: "/demos/vouchers.jpg",
     length: "1:36",
@@ -96,7 +96,7 @@ export function Demos() {
         <div className="text-center">
           <h2 className="display text-[clamp(32px,4.4vw,48px)]">See it work</h2>
           <p className="mx-auto mt-3 max-w-[34rem] text-balance font-serif text-[clamp(17px,1.8vw,21px)] leading-[1.45] text-ink/75">
-            My build from an empty folder, and a voucher running it on their own laptop.
+            Me setting it up, and someone else trying it on their laptop.
           </p>
         </div>
         <div className="mt-12 grid gap-x-6 gap-y-10 md:grid-cols-2">

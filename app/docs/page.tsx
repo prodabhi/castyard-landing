@@ -24,7 +24,7 @@ export default function Introduction() {
             className="size-full border-0"
           />
         </div>
-        <figcaption className="mt-3 text-[13.5px] text-fg/50">Building Castyard (2:54): from an empty folder to a live client.</figcaption>
+        <figcaption className="mt-3 text-[13.5px] text-fg/50">Building Castyard (2:54). Me setting it up from scratch.</figcaption>
       </figure>
       <Diagram
         name="big-picture"
