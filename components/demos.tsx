@@ -2,11 +2,11 @@
 
 import Image from "next/image";
 import { useRef, useState } from "react";
-import { Reveal } from "./reveal";
-import { Tilt } from "./tilt";
+import { pillLight } from "./primitives";
+import { VoucherCast } from "./voucher";
 
-// src: a YouTube link (unlisted is fine), an MP4 URL, a path to a file in public/,
-// or a Google Drive share link (low quality). Leave it empty to show "coming soon".
+// src: a YouTube link (unlisted is fine), a Loom share link, an MP4 URL, a path to a file
+// in public/, or a Google Drive share link (low quality). Leave it empty to show "coming soon".
 // poster: an image in public/ shown before the video plays (optional).
 // length: shown beside the title, e.g. "2:54" (optional).
 type Demo = { title: string; note: string; src: string; poster?: string; length?: string };
@@ -19,13 +19,23 @@ const demos: Demo[] = [
     poster: "/demos/building-castyard.jpg",
     length: "2:54",
   },
-  { title: "Vouchers", note: "People vouching for Castyard.", src: "" },
+  {
+    title: "Vouchers",
+    note: "People vouching for Castyard.",
+    src: "https://www.loom.com/share/1ee2171b037b42e3aa4c41faba30119c",
+    poster: "/demos/vouchers.jpg",
+    length: "1:36",
+  },
 ];
 
 /** YouTube watch, share, embed and shorts links → the video id. */
 function youtubeId(src: string) {
   const m = src.match(/(?:youtu\.be\/|youtube(?:-nocookie)?\.com\/(?:watch\?(?:.*&)?v=|embed\/|shorts\/|live\/))([\w-]{11})/);
   return m?.[1] ?? null;
+}
+
+function loomId(src: string) {
+  return src.match(/loom\.com\/(?:share|embed)\/([\da-f]{32})/)?.[1] ?? null;
 }
 
 function driveId(src: string) {
@@ -37,12 +47,14 @@ function driveId(src: string) {
 function embedUrl(src: string) {
   const yt = youtubeId(src);
   if (yt) return `https://www.youtube-nocookie.com/embed/${yt}?autoplay=1&rel=0&playsinline=1`;
+  const loom = loomId(src);
+  if (loom) return `https://www.loom.com/embed/${loom}?autoplay=1&hide_owner=true&hide_share=true&hide_title=true&hideEmbedTopBar=true`;
   const drive = driveId(src);
   if (drive) return `https://drive.google.com/file/d/${drive}/preview`;
   return null;
 }
 
-/** YouTube/Drive links play in their embedded player; any other MP4 URL plays in our own <video>. */
+/** YouTube/Loom/Drive links play in their embedded player; any other MP4 URL plays in our own <video>. */
 function Player({ title, src, poster }: { title: string; src: string; poster?: string }) {
   const [failed, setFailed] = useState(false);
   const embed = src ? embedUrl(src) : null;
@@ -79,13 +91,20 @@ function Player({ title, src, poster }: { title: string; src: string; poster?: s
 
 export function Demos() {
   return (
-    <section id="demos" className="flex min-h-[100svh] items-center bg-paper py-24 text-ink">
-      <div className="mx-auto grid w-full max-w-[1180px] gap-x-6 gap-y-12 px-5 sm:px-8 md:grid-cols-2">
-        {demos.map((d, i) => (
-          <Reveal key={d.title} delay={i * 100}>
-            <DemoCard {...d} />
-          </Reveal>
-        ))}
+    <section id="demos" className="scroll-mt-16 border-t border-ink/[0.06] bg-white px-5 py-24 text-ink sm:px-8">
+      <div className="mx-auto max-w-[1180px]">
+        <div className="text-center">
+          <h2 className="display text-[clamp(32px,4.4vw,48px)]">See it work</h2>
+          <p className="mx-auto mt-3 max-w-[34rem] text-balance font-serif text-[clamp(17px,1.8vw,21px)] leading-[1.45] text-ink/75">
+            My build from an empty folder, and a voucher running it on their own laptop.
+          </p>
+        </div>
+        <div className="mt-12 grid gap-x-6 gap-y-10 md:grid-cols-2">
+          {demos.map((d) => (
+            <DemoCard key={d.title} {...d} />
+          ))}
+        </div>
+        <VoucherCast />
       </div>
     </section>
   );
@@ -107,14 +126,12 @@ export function WatchDemo() {
           dialog.current?.showModal();
           setOpen(true);
         }}
-        className="h-watch inline-flex items-center gap-2.5 rounded-full border border-white/15 bg-white/[0.04] py-1.5 pl-1.5 pr-5 text-[14px] text-white/85 hover:border-white/30 hover:text-white"
+        className={pillLight}
       >
-        <span className="h-watch-dot grid size-7 place-items-center rounded-full bg-white text-ink">
-          <svg viewBox="0 0 12 12" className="ml-0.5 size-2.5" aria-hidden>
-            <path d="M2.5 1.5v9l7.5-4.5z" fill="currentColor" />
-          </svg>
-        </span>
-        Watch how it works
+        <svg viewBox="0 0 12 12" className="size-3" aria-hidden>
+          <path d="M2.5 1.5v9l7.5-4.5z" fill="currentColor" />
+        </svg>
+        Watch the demo
       </button>
 
       <dialog
@@ -124,7 +141,7 @@ export function WatchDemo() {
         onClick={(e) => e.target === dialog.current && close()}
         className="m-auto w-[min(1100px,92vw)] overflow-visible bg-transparent p-0 backdrop:bg-black/85 backdrop:backdrop-blur-sm"
       >
-        <div className="relative aspect-video overflow-hidden rounded-[20px] bg-ink">
+        <div className="relative aspect-video overflow-hidden rounded-xl bg-ink">
           {/* Unmounted when closed, so playback stops. */}
           {open && <Player title={title} src={src} poster={poster} />}
         </div>
@@ -148,7 +165,7 @@ function DemoCard({ title, note, src, poster, length }: Demo) {
 
   return (
     <figure>
-      <Tilt disabled={playing} className="relative aspect-video overflow-hidden rounded-[20px] bg-ink">
+      <div className="relative aspect-video overflow-hidden rounded-xl bg-ink">
         {playing ? (
           <Player title={title} src={src} poster={poster} />
         ) : (
@@ -156,7 +173,7 @@ function DemoCard({ title, note, src, poster, length }: Demo) {
             type="button"
             onClick={() => setPlaying(true)}
             aria-label={`Play ${title}`}
-            className="group absolute inset-0 grid place-items-center bg-[radial-gradient(70%_70%_at_50%_50%,rgba(255,255,255,0.08),transparent)]"
+            className="group absolute inset-0 grid place-items-center"
           >
             {poster && (
               <>
@@ -167,23 +184,21 @@ function DemoCard({ title, note, src, poster, length }: Demo) {
                   sizes="(min-width: 768px) 50vw, 100vw"
                   className="object-cover"
                 />
-                <span className="absolute inset-0 bg-black/25 transition-colors group-hover:bg-black/15" />
+                <span className="absolute inset-0 bg-black/20" />
               </>
             )}
-            <span className="relative grid size-16 place-items-center rounded-full bg-white text-ink transition-transform duration-300 group-hover:scale-105">
+            <span className="relative grid size-14 place-items-center rounded-full bg-white text-ink shadow-sm">
               <svg viewBox="0 0 12 12" className="ml-1 size-4" aria-hidden>
                 <path d="M2.5 1.5v9l7.5-4.5z" fill="currentColor" />
               </svg>
             </span>
           </button>
         )}
-      </Tilt>
-      <figcaption className="mt-5 px-1">
-        <span className="flex items-baseline justify-between gap-4">
-          <span className="text-[19px] font-medium tracking-[-0.02em]">{title}</span>
-          <span className="text-[14px] tabular-nums text-ink/40">{src ? length : "Coming soon"}</span>
-        </span>
-        <span className="mt-1 block text-[14.5px] text-ink/50">{note}</span>
+      </div>
+      <figcaption className="mt-4 text-center">
+        <span className="font-serif text-[20px] font-medium">{title}</span>
+        <span className="ml-2 text-[14px] tabular-nums text-ink/45">{src ? length : "Coming soon"}</span>
+        <span className="mt-1 block text-[14.5px] text-ink/60">{note}</span>
       </figcaption>
     </figure>
   );

@@ -1,5 +1,4 @@
-import { Wordmark } from "./primitives";
-import { Reveal } from "./reveal";
+import { Footer } from "./footer";
 
 // Answers stick to what the quickstart guide states.
 const faqs = [
@@ -21,46 +20,32 @@ const faqs = [
   },
   {
     q: "What does running my own node take?",
-    a: "A Google Cloud project on a paid plan, three commands, and about a day for the node to sync. Then point the client at it with --node.",
+    a: "A Google Cloud project on a paid plan, three commands, and up to 24 hours for the node to sync. Then point the client at it with --node.",
   },
 ];
 
+/* Dark FAQ band with boxed rows, the way ns.com ends its page. */
 export function Faq() {
   return (
-    <section id="faq" className="flex min-h-[100svh] flex-col bg-ink text-white">
-      <div className="mx-auto flex w-full max-w-[1180px] flex-1 items-center px-5 py-24 sm:px-8">
-        <div className="grid w-full gap-10 md:grid-cols-[1fr_2fr] md:gap-16">
-          <Reveal>
-            <h2 className="display text-[clamp(40px,5vw,64px)]">FAQ</h2>
-          </Reveal>
-          <Reveal delay={100}>
-            <div className="divide-y divide-white/10 border-y border-white/10">
-              {faqs.map((f) => (
-                <details key={f.q} className="group h-faq">
-                  <summary className="flex cursor-pointer list-none items-center justify-between gap-6 py-5 text-[17px] text-white/90 transition-colors hover:text-white [&::-webkit-details-marker]:hidden">
-                    <span className="h-faq-q">{f.q}</span>
-                    <svg
-                      viewBox="0 0 16 16"
-                      className="h-faq-icon size-4 shrink-0 text-white/40 group-open:rotate-45"
-                      aria-hidden
-                    >
-                      <path d="M8 3v10M3 8h10" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" />
-                    </svg>
-                  </summary>
-                  <p className="max-w-[36rem] pb-6 pr-10 text-[15.5px] leading-relaxed text-white/55">{f.a}</p>
-                </details>
-              ))}
-            </div>
-          </Reveal>
+    <section id="faq" className="scroll-mt-16 bg-ink text-white">
+      <div className="mx-auto max-w-[720px] px-5 py-24 sm:px-8">
+        <h2 className="display text-[clamp(32px,4.4vw,44px)]">FAQs</h2>
+        <div className="mt-8 space-y-2">
+          {faqs.map((f) => (
+            <details key={f.q} className="group rounded-lg border border-white/10 bg-white/[0.04]">
+              <summary className="flex cursor-pointer list-none items-center justify-between gap-6 px-4 py-3.5 text-[15.5px] font-medium text-white/90 hover:text-white [&::-webkit-details-marker]:hidden">
+                {f.q}
+                <svg viewBox="0 0 16 16" className="size-4 shrink-0 text-white/45 group-open:rotate-180" aria-hidden>
+                  <path d="m4 6 4 4 4-4" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" />
+                </svg>
+              </summary>
+              <p className="px-4 pb-4 text-[15px] leading-relaxed text-white/60">{f.a}</p>
+            </details>
+          ))}
         </div>
       </div>
 
-      <footer className="mx-auto w-full max-w-[1180px] px-5 sm:px-8">
-        <div className="flex items-center justify-between border-t border-white/10 py-7">
-          <Wordmark className="text-white/80" />
-          <span className="text-[13px] text-white/40">© 2026</span>
-        </div>
-      </footer>
+      <Footer dark />
     </section>
   );
 }

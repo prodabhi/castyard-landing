@@ -3,31 +3,26 @@
 @theme inline {
   --font-sans: var(--font-geist-sans);
   --font-mono: var(--font-geist-mono);
+  --font-serif: var(--font-source-serif);
 
-  /* Two tones: near-black and warm off-white */
-  --color-ink: #0a0a0a;
+  /* ns.com's palette: white page, near-black charcoal ink */
+  --color-ink: #1a1a1e;
   --color-paper: #f5f4f0;
 
+  /* Docs tokens, set on .docs below */
+  --color-fg: var(--docs-fg);
+  --color-bg: var(--docs-bg);
+  --color-mark: var(--docs-mark);
 }
 
-
-/* transitions.dev motion tokens (subset this page uses) */
-:root {
-  --duration-quick: 150ms;
-  --duration-fast: 250ms;
-  --duration-slow: 400ms;
-  --ease-smooth-out: cubic-bezier(0.22, 1, 0.36, 1);
-  --distance-micro: 4px;
-
-  /* Card hover tilt */
-  --tilt-perspective: 1000px;
-  --tilt-return: 1000ms;
-  --tilt-return-ease: cubic-bezier(0.22, 1, 0.36, 1);
-  --tilt-follow: 400ms;
-  --tilt-follow-ease: cubic-bezier(0.22, 1, 0.36, 1);
-  --tilt-glare-opacity: 0.32;
-  --tilt-glare-fade: 300ms;
-  --tilt-glare-ease: cubic-bezier(0.22, 1, 0.36, 1);
+/* Docs: always light, like the landing page. Terminal blocks stay dark. */
+.docs {
+  --docs-bg: #ffffff;
+  --docs-fg: #1a1a1e;
+  --docs-mark: #8a5a00;
+  color-scheme: light;
+  background: var(--docs-bg);
+  color: var(--docs-fg);
 }
 
 html {
@@ -35,153 +30,27 @@ html {
 }
 
 body {
-  background: var(--color-ink);
-  color: #fafafa;
+  background: #ffffff;
+  color: var(--color-ink);
   font-family: var(--font-geist-sans), ui-sans-serif, system-ui, sans-serif;
   -webkit-font-smoothing: antialiased;
 }
 
 ::selection {
-  background: rgba(255, 255, 255, 0.2);
+  background: rgba(26, 26, 30, 0.12);
 }
 
-/* Display type: tight leading, slight negative tracking */
+/* Display type: serif headings, as on ns.com */
 .display {
+  font-family: var(--font-source-serif), ui-serif, Georgia, serif;
   font-weight: 500;
-  letter-spacing: -0.035em;
-  line-height: 1.02;
+  letter-spacing: -0.02em;
+  line-height: 1.1;
   text-wrap: balance;
-}
-
-/* Fade-up on scroll */
-.reveal {
-  opacity: 0;
-  transform: translateY(16px);
-  transition:
-    opacity 700ms cubic-bezier(0.22, 1, 0.36, 1),
-    transform 700ms cubic-bezier(0.22, 1, 0.36, 1);
-  transition-delay: var(--reveal-delay, 0ms);
-}
-.reveal[data-shown="true"] {
-  opacity: 1;
-  transform: none;
-}
-
-/* Card hover tilt (transitions.dev). In the components layer so Tailwind
-   utilities such as rounded-[20px] still win. touch-action is left alone:
-   these cards are large, so a finger drag should scroll the page. */
-@layer components {
-  .t-tilt-card {
-    position: relative;
-    border-radius: 12px;
-    overflow: hidden;
-    transform:
-      perspective(var(--tilt-perspective))
-      rotateX(var(--tilt-rx, 0deg))
-      rotateY(var(--tilt-ry, 0deg));
-    transform-style: preserve-3d;
-    transition: transform var(--tilt-return) var(--tilt-return-ease);
-    will-change: transform;
-  }
-  .t-tilt-card.is-tilting {
-    transition: transform var(--tilt-follow) var(--tilt-follow-ease);
-  }
-  .t-tilt-glare {
-    position: absolute;
-    inset: 0;
-    pointer-events: none;
-    opacity: 0;
-    mix-blend-mode: screen;
-    background:
-      radial-gradient(circle 95px at var(--tilt-gx, 50%) var(--tilt-gy, 50%),
-        rgba(255,255,255,0.48), rgba(255,255,255,0.06) 52%, rgba(255,255,255,0) 84%),
-      radial-gradient(circle 200px at var(--tilt-gx, 50%) var(--tilt-gy, 50%),
-        rgba(255,255,255,0.22), rgba(255,255,255,0.04) 58%, rgba(255,255,255,0) 78%),
-      radial-gradient(circle 360px at var(--tilt-gx, 50%) var(--tilt-gy, 50%),
-        rgba(255,255,255,0.10), rgba(255,255,255,0) 88%);
-    transition: opacity var(--tilt-glare-fade) var(--tilt-glare-ease);
-  }
-  .t-tilt.is-hover .t-tilt-glare { opacity: var(--tilt-glare-opacity); }
-}
-
-/* Small hover touches, all on the shared motion tokens */
-.h-pill {
-  transition:
-    transform var(--duration-fast) var(--ease-smooth-out),
-    box-shadow var(--duration-fast) var(--ease-smooth-out);
-}
-.h-watch,
-.h-watch .h-watch-dot {
-  transition:
-    transform var(--duration-fast) var(--ease-smooth-out),
-    border-color var(--duration-fast) var(--ease-smooth-out),
-    color var(--duration-fast) var(--ease-smooth-out);
-}
-.h-link {
-  position: relative;
-}
-.h-link::after {
-  content: "";
-  position: absolute;
-  left: 0.75rem;
-  right: 0.75rem;
-  bottom: 0.2rem;
-  height: 1px;
-  background: currentColor;
-  transform: scaleX(0);
-  transform-origin: right;
-  transition: transform var(--duration-fast) var(--ease-smooth-out);
-}
-.h-faq-q,
-.h-chev,
-.h-arrow {
-  transition: transform var(--duration-fast) var(--ease-smooth-out);
-}
-.h-faq-icon {
-  transition:
-    rotate var(--duration-fast) var(--ease-smooth-out),
-    color var(--duration-fast) var(--ease-smooth-out);
-}
-
-@media (hover: hover) {
-  .h-pill:hover {
-    transform: translateY(-1px);
-    box-shadow: 0 0 80px -6px rgba(255, 255, 255, 0.4);
-  }
-  .h-watch:hover .h-watch-dot { transform: scale(1.12); }
-  .h-link:hover::after {
-    transform: scaleX(1);
-    transform-origin: left;
-  }
-  .h-faq:hover .h-faq-q { transform: translateX(var(--distance-micro)); }
-  .h-faq:hover .h-faq-icon { color: rgba(255, 255, 255, 0.9); }
-  .h-chev-trigger:hover .h-chev { transform: translateY(2px); }
-  .h-arrow-trigger:hover .h-arrow { transform: translateX(var(--distance-micro)); }
 }
 
 @media (prefers-reduced-motion: reduce) {
   html {
     scroll-behavior: auto;
-  }
-  .reveal {
-    opacity: 1;
-    transform: none;
-    transition: none;
-  }
-  .t-tilt-card { transform: none !important; transition: none !important; }
-  .h-pill,
-  .h-watch-dot,
-  .h-link::after,
-  .h-faq-q,
-  .h-chev,
-  .h-arrow {
-    transition: none;
-  }
-  .h-pill:hover,
-  .h-watch:hover .h-watch-dot,
-  .h-faq:hover .h-faq-q,
-  .h-chev-trigger:hover .h-chev,
-  .h-arrow-trigger:hover .h-arrow {
-    transform: none;
   }
 }

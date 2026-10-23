@@ -1,27 +1,31 @@
 import Link from "next/link";
 import { Commands } from "./commands";
 import { WatchDemo } from "./demos";
-import { Wordmark } from "./primitives";
-import { Reveal } from "./reveal";
+import { Arrow, Wordmark, pillDark } from "./primitives";
 
-export function Nav() {
+/** Site header, shared by the landing page and the docs. `frame` sets the inner width. */
+export function Nav({ frame = "mx-auto max-w-[1180px] px-5 sm:px-8" }: { frame?: string }) {
   return (
-    <header className="absolute inset-x-0 top-0 z-20">
-      <nav className="mx-auto flex h-16 max-w-[1180px] items-center justify-between px-5 sm:px-8">
-        <a href="#" aria-label="Castyard home" className="text-white">
+    <header className="sticky top-0 z-20 border-b border-ink/[0.06] bg-white/90 backdrop-blur-md">
+      <nav className={`${frame} flex h-16 items-center justify-between`}>
+        <Link href="/" aria-label="Castyard home" className="text-ink">
           <Wordmark />
-        </a>
-        <div className="flex items-center gap-1 text-[14px] text-white/60">
+        </Link>
+        <div className="flex items-center gap-2 text-[14px]">
           {[
-            { label: "Demo", href: "#demos" },
-            { label: "FAQ", href: "#faq" },
+            { label: "Demo", href: "/#demos" },
+            { label: "FAQ", href: "/#faq" },
           ].map((l) => (
-            <a key={l.href} href={l.href} className="h-link rounded-md px-3 py-1.5 transition-colors hover:text-white">
+            <a key={l.href} href={l.href} className="hidden px-3 py-1.5 text-ink/60 hover:text-ink sm:block">
               {l.label}
             </a>
           ))}
-          <Link href="/docs" className="h-link rounded-md px-3 py-1.5 transition-colors hover:text-white">
+          <Link href="/docs" className="rounded-full border border-ink/15 px-4 py-1.5 font-medium text-ink hover:border-ink/35">
             Docs
+          </Link>
+          <Link href="/docs/quickstart" className="inline-flex items-center gap-1.5 rounded-full bg-ink px-4 py-1.5 font-medium text-white hover:bg-black">
+            Get started
+            <Arrow />
           </Link>
         </div>
       </nav>
@@ -31,35 +35,20 @@ export function Nav() {
 
 export function Hero() {
   return (
-    <section className="relative flex min-h-[100svh] flex-col justify-center overflow-hidden bg-ink py-28">
-      <div
-        aria-hidden
-        className="pointer-events-none absolute inset-0"
-        style={{ background: "radial-gradient(55% 45% at 50% 55%, rgba(255,255,255,0.06), transparent 70%)" }}
-      />
-      <div className="relative mx-auto w-full max-w-[1180px] px-5 text-center sm:px-8">
-        <Reveal>
-          <h1 className="display text-[clamp(44px,7vw,84px)] text-white">
-            Farcaster,
-            <br />
-            on your own node.
-          </h1>
-        </Reveal>
-        <Reveal delay={100} className="mt-8 flex flex-wrap items-center justify-center gap-x-6 gap-y-3">
-          <WatchDemo />
-          <Link
-            href="/docs"
-            className="h-arrow-trigger inline-flex items-center gap-1.5 text-[14px] text-white/60 transition-colors hover:text-white"
-          >
-            Read the docs
-            <svg viewBox="0 0 16 16" className="h-arrow size-3.5" aria-hidden>
-              <path d="M3 8h10M9 4l4 4-4 4" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" />
-            </svg>
-          </Link>
-        </Reveal>
-        <Reveal delay={200} className="mt-12">
-          <Commands />
-        </Reveal>
+    <section className="bg-white px-5 pb-24 pt-20 text-center sm:px-8 sm:pt-28">
+      <h1 className="display mx-auto text-[clamp(40px,6.4vw,72px)] text-ink">Farcaster, on your own node.</h1>
+      <p className="mx-auto mt-5 max-w-[36rem] text-balance font-serif text-[clamp(19px,2.2vw,25px)] leading-[1.45] text-ink/80">
+        A Farcaster client on your laptop. It reads and posts through a Snapchain node: mine, or your own.
+      </p>
+      <div className="mt-9 flex flex-wrap items-center justify-center gap-3">
+        <Link href="/docs/quickstart" className={pillDark}>
+          Get started
+          <Arrow />
+        </Link>
+        <WatchDemo />
+      </div>
+      <div className="mt-14">
+        <Commands />
       </div>
     </section>
   );
