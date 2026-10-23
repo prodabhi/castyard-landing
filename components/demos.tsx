@@ -2,7 +2,6 @@
 
 import Image from "next/image";
 import { useRef, useState } from "react";
-import { pillLight } from "./primitives";
 import { VoucherCast } from "./voucher";
 
 // src: a YouTube link (unlisted is fine), a Loom share link, an MP4 URL, a path to a file
@@ -111,16 +110,24 @@ export function Demos() {
 }
 
 /**
- * Hero button that plays the build demo in a full-screen player. On mouse hover, a small muted
- * preview loops above it; clicking the preview opens the full video too.
+ * Hero button that plays the build demo in a full-screen player. On mouse hover the pill grows in
+ * place into a muted preview of the demo (pushing the content below down), and shrinks back on
+ * leave. Clicking either state opens the full video.
  */
 export function WatchDemo() {
   const dialog = useRef<HTMLDialogElement>(null);
+  const timer = useRef<ReturnType<typeof setTimeout>>(undefined);
   const [open, setOpen] = useState(false);
   const [peek, setPeek] = useState(false);
   const { title, src, poster, length } = demos[0];
 
+  // Short delays so passing over the button, or brushing its edge, doesn't make the page jump.
+  const setPeekSoon = (next: boolean, ms: number) => {
+    clearTimeout(timer.current);
+    timer.current = setTimeout(() => setPeek(next), ms);
+  };
   const show = () => {
+    clearTimeout(timer.current);
     setPeek(false);
     dialog.current?.showModal();
     setOpen(true);
@@ -129,53 +136,47 @@ export function WatchDemo() {
 
   return (
     <>
-      <div
-        className="relative inline-block"
-        onPointerEnter={(e) => e.pointerType === "mouse" && setPeek(true)}
-        onPointerLeave={() => setPeek(false)}
+      <button
+        type="button"
+        data-open={peek}
+        onClick={show}
+        onPointerEnter={(e) => e.pointerType === "mouse" && setPeekSoon(true, 80)}
+        onPointerLeave={() => setPeekSoon(false, 150)}
+        onFocus={(e) => e.currentTarget.matches(":focus-visible") && setPeekSoon(true, 0)}
+        onBlur={() => setPeekSoon(false, 0)}
+        aria-label={`Watch the demo: ${title}, ${length}`}
+        className="morph relative mx-auto block overflow-hidden border text-[15px] font-medium"
       >
-        {/* pl-3 keeps the hover area continuous between the button and the preview */}
-        <div data-open={peek} aria-hidden={!peek} className="peek absolute left-full top-1/2 z-10 pl-3">
-          <button
-            type="button"
-            tabIndex={-1}
-            onClick={show}
-            aria-label={`Play ${title}`}
-            className="relative block w-[300px] overflow-hidden rounded-xl border border-ink/10 bg-ink shadow-[0_12px_32px_-12px_rgba(0,0,0,0.35)]"
-          >
-            <span className="relative block aspect-video">
-              {poster && <Image src={poster} alt="" fill sizes="300px" className="object-cover" />}
-              {/* Mounted only while open, so the clip loads on first hover and restarts each time. */}
-              {peek && (
-                <video
-                  src="/demos/preview.mp4"
-                  autoPlay
-                  muted
-                  loop
-                  playsInline
-                  className="absolute inset-0 size-full object-cover"
-                />
-              )}
-            </span>
-            <span className="absolute bottom-2 left-2 rounded-md bg-black/70 px-1.5 py-0.5 font-sans text-[11.5px] text-white">
-              {title} · {length}
-            </span>
-          </button>
-        </div>
-
-        <button
-          type="button"
-          onClick={show}
-          onFocus={(e) => e.currentTarget.matches(":focus-visible") && setPeek(true)}
-          onBlur={() => setPeek(false)}
-          className={pillLight}
-        >
+        {/* Closed: the pill label */}
+        <span className="morph-label absolute inset-0 flex items-center justify-center gap-2 text-ink">
           <svg viewBox="0 0 12 12" className="size-3" aria-hidden>
             <path d="M2.5 1.5v9l7.5-4.5z" fill="currentColor" />
           </svg>
           Watch the demo
-        </button>
-      </div>
+        </span>
+
+        {/* Open: the preview */}
+        <span className="morph-media absolute inset-0" aria-hidden>
+          {poster && <Image src={poster} alt="" fill sizes="360px" className="object-cover" />}
+          {/* Mounted only while open, so the clip loads on first hover and restarts each time. */}
+          {peek && (
+            <video
+              src="/demos/preview.mp4"
+              autoPlay
+              muted
+              loop
+              playsInline
+              className="absolute inset-0 size-full object-cover"
+            />
+          )}
+          <span className="absolute bottom-2.5 left-2.5 flex items-center gap-1.5 rounded-full bg-white py-1 pl-2 pr-2.5 text-[12.5px] text-ink">
+            <svg viewBox="0 0 12 12" className="size-2.5" aria-hidden>
+              <path d="M2.5 1.5v9l7.5-4.5z" fill="currentColor" />
+            </svg>
+            Watch · {length}
+          </span>
+        </span>
+      </button>
 
       <dialog
         ref={dialog}

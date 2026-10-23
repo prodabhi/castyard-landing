@@ -51,36 +51,64 @@ body {
 
 /* transitions.dev motion tokens used below */
 :root {
-  --duration-micro: 80ms;
   --duration-quick: 150ms;
-  --ease-out: ease-out;
-  --scale-small: 0.98;
+  --duration-medium: 350ms;
+  --ease-smooth-out: cubic-bezier(0.22, 1, 0.36, 1);
+
+  /* "Watch the demo": pill size, and the preview it grows into */
+  --morph-pill-w: 184px;
+  --morph-pill-h: 44px;
+  --morph-open-w: min(360px, calc(100vw - 40px));
 }
 
-/* Hover preview to the right of "Watch the demo": tooltip-style, delayed in, quick out. */
-.peek {
-  opacity: 0;
-  transform: translateX(-6px) translateY(-50%) scale(var(--scale-small));
-  transform-origin: left center;
-  pointer-events: none;
+/* "Watch the demo" grows in place into a preview (card resize), pushing the content below down. */
+.morph {
+  width: var(--morph-pill-w);
+  height: var(--morph-pill-h);
+  /* A real radius (half the pill height), not 9999px: animating down from 9999px keeps the
+     card a capsule for most of the resize, then snaps to a rectangle at the end. */
+  border-radius: calc(var(--morph-pill-h) / 2);
+  border-color: rgba(26, 26, 30, 0.15);
+  background: #ffffff;
   transition:
-    opacity var(--duration-micro) var(--ease-out),
-    transform var(--duration-micro) var(--ease-out);
+    width var(--duration-medium) var(--ease-smooth-out),
+    height var(--duration-medium) var(--ease-smooth-out),
+    border-radius var(--duration-medium) var(--ease-smooth-out),
+    border-color var(--duration-quick) var(--ease-smooth-out),
+    background-color var(--duration-quick) var(--ease-smooth-out);
 }
-.peek[data-open="true"] {
+.morph:hover {
+  border-color: rgba(26, 26, 30, 0.35);
+}
+.morph[data-open="true"] {
+  width: var(--morph-open-w);
+  height: calc(var(--morph-open-w) * 9 / 16);
+  border-radius: 14px;
+  border-color: rgba(26, 26, 30, 0.1);
+  background: var(--color-ink);
+}
+.morph-label,
+.morph-media {
+  transition: opacity var(--duration-quick) var(--ease-smooth-out);
+}
+.morph-media {
+  opacity: 0;
+}
+.morph[data-open="true"] .morph-label {
+  opacity: 0;
+}
+.morph[data-open="true"] .morph-media {
   opacity: 1;
-  transform: translateX(0) translateY(-50%) scale(1);
-  pointer-events: auto;
-  transition-duration: var(--duration-quick);
-  transition-delay: var(--duration-micro);
+  transition-delay: 100ms;
 }
 
 @media (prefers-reduced-motion: reduce) {
   html {
     scroll-behavior: auto;
   }
-  .peek,
-  .peek[data-open="true"] {
+  .morph,
+  .morph-label,
+  .morph-media {
     transition: none;
   }
 }
