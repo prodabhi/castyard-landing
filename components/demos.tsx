@@ -1,7 +1,7 @@
 "use client";
 
 import Image from "next/image";
-import { useRef, useState } from "react";
+import { type CSSProperties, useRef, useState } from "react";
 import { VoucherCast } from "./voucher";
 
 // src: a YouTube link (unlisted is fine), a Loom share link, an MP4 URL, a path to a file
@@ -109,17 +109,35 @@ export function Demos() {
   );
 }
 
-/**
- * Hero button that plays the build demo in a full-screen player. On mouse hover the pill grows in
- * place into a muted preview of the demo (pushing the content below down), and shrinks back on
- * leave. Clicking either state opens the full video.
- */
+/** The Farcaster explainer: the six parts of Farcaster, then where castyard fits. */
+export const explainer: Demo = {
+  title: "Inside Farcaster",
+  note: "The six parts of Farcaster, and where castyard fits.",
+  src: "/docs/diagrams/castyard-explained-vo.mp4",
+  poster: "/demos/understand-farcaster.jpg",
+  length: "1:06",
+};
+
+/** Hero button: plays the build demo. */
 export function WatchDemo() {
+  return <VideoPill label="Watch the demo" preview="/demos/preview.mp4" {...demos[0]} />;
+}
+
+/** Hero button: plays the Farcaster explainer. */
+export function UnderstandFarcaster() {
+  return <VideoPill label="Understand Farcaster" preview="/demos/explainer-preview.mp4" width={212} {...explainer} />;
+}
+
+/**
+ * Hero button that plays a video in a full-screen player. On mouse hover the pill grows in place
+ * into a muted preview (pushing the content below down), and shrinks back on leave. Clicking
+ * either state opens the full video. `width` is the closed pill's width, to fit the label.
+ */
+function VideoPill({ label, preview, width, title, src, poster, length }: Demo & { label: string; preview: string; width?: number }) {
   const dialog = useRef<HTMLDialogElement>(null);
   const timer = useRef<ReturnType<typeof setTimeout>>(undefined);
   const [open, setOpen] = useState(false);
   const [peek, setPeek] = useState(false);
-  const { title, src, poster, length } = demos[0];
 
   // Short delays so passing over the button, or brushing its edge, doesn't make the page jump.
   const setPeekSoon = (next: boolean, ms: number) => {
@@ -144,15 +162,16 @@ export function WatchDemo() {
         onPointerLeave={() => setPeekSoon(false, 150)}
         onFocus={(e) => e.currentTarget.matches(":focus-visible") && setPeekSoon(true, 0)}
         onBlur={() => setPeekSoon(false, 0)}
-        aria-label={`Watch the demo: ${title}, ${length}`}
-        className="morph relative mx-auto block overflow-hidden border text-[15px] font-medium"
+        aria-label={`${label}: ${title}, ${length}`}
+        style={width ? ({ "--morph-pill-w": `${width}px` } as CSSProperties) : undefined}
+        className="morph relative shrink-0 overflow-hidden border text-[15px] font-medium"
       >
         {/* Closed: the pill label */}
         <span className="morph-label absolute inset-0 flex items-center justify-center gap-2 text-ink">
           <svg viewBox="0 0 12 12" className="size-3" aria-hidden>
             <path d="M2.5 1.5v9l7.5-4.5z" fill="currentColor" />
           </svg>
-          Watch the demo
+          {label}
         </span>
 
         {/* Open: the preview */}
@@ -161,7 +180,7 @@ export function WatchDemo() {
           {/* Mounted only while open, so the clip loads on first hover and restarts each time. */}
           {peek && (
             <video
-              src="/demos/preview.mp4"
+              src={preview}
               autoPlay
               muted
               loop

@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { Diagram, Section } from "@/components/docs/blocks";
+import { Explainer } from "@/components/docs/explainer";
 
 export const metadata: Metadata = {
   title: "Introduction · Castyard docs",
@@ -13,7 +14,8 @@ export default function Introduction() {
       title="Farcaster on your own node"
       lead="castyard is a Farcaster client you run yourself. It connects to a node: a server that keeps a copy of all Farcaster data. Start with mine, then run your own."
     >
-      <figure className="mt-8">
+      <Explainer />
+      <figure className="mt-10">
         <div className="aspect-video overflow-hidden rounded-xl border border-fg/10 bg-black">
           <iframe
             src="https://www.youtube-nocookie.com/embed/_cZi5oGPVNo?rel=0"

@@ -1,6 +1,6 @@
 import Link from "next/link";
 import { Commands } from "./commands";
-import { WatchDemo } from "./demos";
+import { UnderstandFarcaster, WatchDemo } from "./demos";
 import { Arrow, Wordmark } from "./primitives";
 
 /** Site header, shared by the landing page and the docs. `frame` sets the inner width. */
@@ -40,8 +40,10 @@ export function Hero() {
       <p className="mx-auto mt-5 whitespace-nowrap font-serif text-[clamp(18px,2.2vw,25px)] leading-[1.45] text-ink/80">
         A Farcaster client you run yourself
       </p>
-      <div className="mt-9">
+      {/* items-start: when one pill grows into its preview, the other stays where it was. */}
+      <div className="mt-9 flex flex-wrap items-start justify-center gap-3">
         <WatchDemo />
+        <UnderstandFarcaster />
       </div>
       <div className="mt-10">
         <Commands />

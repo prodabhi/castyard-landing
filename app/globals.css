@@ -70,6 +70,8 @@ body {
   border-radius: calc(var(--morph-pill-h) / 2);
   border-color: rgba(26, 26, 30, 0.15);
   background: #ffffff;
+  /* Keep the dark open background out from under the border, so light previews get a light edge. */
+  background-clip: padding-box;
   transition:
     width var(--duration-medium) var(--ease-smooth-out),
     height var(--duration-medium) var(--ease-smooth-out),
@@ -85,7 +87,7 @@ body {
   height: calc(var(--morph-open-w) * 9 / 16);
   border-radius: 14px;
   border-color: rgba(26, 26, 30, 0.1);
-  background: var(--color-ink);
+  background-color: var(--color-ink);
 }
 .morph-label,
 .morph-media {
