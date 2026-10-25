@@ -1,4 +1,5 @@
 import { A, C, P, Section, Table, Terminal } from "../blocks";
+import { pkg } from "../../steps";
 
 export function Troubleshooting() {
   return (
@@ -10,6 +11,8 @@ export function Troubleshooting() {
           [<C key="m">{"doesn't own fid"}</C>, "Wrong recovery phrase or FID."],
           [<C key="m">Not included after 3 attempts</C>, <>Your node may be behind. Check <C>blockDelay</C>, or switch to mine.</>],
           ["Quota error on provision", <>Upgrade from the free trial. See <A href="/docs/provision#free-trial">Provision</A>.</>],
+          [<C key="m">You already have a machine called snapchain-node</C>, <>Your VM exists, so skip provision. Check it with <C>ctl status</C>.</>],
+          ["localhost: \"site can't be reached\"",<>Run the client on your laptop, not the VM. On the VM, run the <C>ssh -L</C> command it prints from your laptop.</>],
         ]}
       />
     </Section>
@@ -23,7 +26,7 @@ export function CleanUp() {
         title="your laptop"
         lines={[
           { kind: "comment", text: "delete the VM, its disk and its IP" },
-          { kind: "cmd", text: "npx --yes castyard@0.1.1 ctl destroy" },
+          { kind: "cmd", text: `npx --yes ${pkg} ctl destroy` },
           { kind: "comment", text: "delete castyard's app key" },
           { kind: "cmd", text: "rm ~/.castyard/YOUR_FID.key" },
         ]}

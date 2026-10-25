@@ -1,4 +1,5 @@
 import { C, List, P, Section, Strong, Table, Terminal } from "../blocks";
+import { pkg } from "../../steps";
 
 export function Operating() {
   return (
@@ -24,11 +25,11 @@ export function Operating() {
         title="your laptop"
         lines={[
           { kind: "comment", text: "status, logs, a shell on the VM" },
-          { kind: "cmd", text: "npx --yes castyard@0.1.1 ctl status" },
-          { kind: "cmd", text: "npx --yes castyard@0.1.1 ctl logs" },
-          { kind: "cmd", text: "npx --yes castyard@0.1.1 ctl ssh" },
+          { kind: "cmd", text: `npx --yes ${pkg} ctl status` },
+          { kind: "cmd", text: `npx --yes ${pkg} ctl logs` },
+          { kind: "cmd", text: `npx --yes ${pkg} ctl ssh` },
           { kind: "comment", text: "stop billing for the machine (the disk still bills)" },
-          { kind: "cmd", text: "npx --yes castyard@0.1.1 ctl stop" },
+          { kind: "cmd", text: `npx --yes ${pkg} ctl stop` },
         ]}
       />
       <P>
