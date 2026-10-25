@@ -2,7 +2,7 @@
 
 import Image from "next/image";
 import { type CSSProperties, useRef, useState } from "react";
-import { VoucherCast } from "./voucher";
+import { VoucherCasts } from "./voucher";
 
 // src: a YouTube link (unlisted is fine), a Loom share link, an MP4 URL, a path to a file
 // in public/, or a Google Drive share link (low quality). Leave it empty to show "coming soon".
@@ -103,7 +103,7 @@ export function Demos() {
             <DemoCard key={d.title} {...d} />
           ))}
         </div>
-        <VoucherCast />
+        <VoucherCasts />
       </div>
     </section>
   );
